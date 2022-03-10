@@ -39,12 +39,12 @@ int main (int argc, char *argv[])
   //TODO: create PLAYER, TEAM, STATE, and COLOR tables in the ACC_BBALL database
   //      load each table with rows from the provided source txt files
   setupTable(C);
-
   exercise(C);
 
 
   //Close database connection
   C->disconnect();
+  delete C;
 
   return 0;
 }
