@@ -25,7 +25,7 @@ void create_color_table(connection * C) {
 
   string sql = "\
         CREATE TABLE COLOR (\
-            COLOR_ID int,\
+            COLOR_ID SERIAL,\
             NAME VARCHAR(100),\
             PRIMARY KEY(COLOR_ID)\
     );";
@@ -40,7 +40,7 @@ void create_state_table(connection * C) {
 
   string sql = "\
         CREATE TABLE STATE (\
-        STATE_ID int,\
+        STATE_ID SERIAL,\
         NAME VARCHAR(100),\
         PRIMARY KEY(STATE_ID));";
   execute_sql(C, sql);
@@ -53,7 +53,7 @@ void create_team_table(connection * C) {
 
   string sql = "\
         CREATE TABLE TEAM (\
-        TEAM_ID int,\
+        TEAM_ID SERIAL,\
         NAME VARCHAR(100),\
         STATE_ID int,\
         COLOR_ID int,\
@@ -77,7 +77,7 @@ void create_player_table(connection * C) {
   }
 
     string sql = "CREATE TABLE PLAYER (\
-        PLAYER_ID int,\
+        PLAYER_ID SERIAL,\
         TEAM_ID int,\
         UNIFORM_NUM int,\
         FIRST_NAME VARCHAR(100),\
