@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
   string sql;
    
   try{
-  
+    connection C("dbname=testdb user=postgres password=abc123");
     if (C.is_open()) {
       cout << "Opened database successfully: " << C.dbname() << endl;
     } else {

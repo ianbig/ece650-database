@@ -6,6 +6,14 @@
 using namespace std;
 using namespace pqxx;
 
+void setupTable(connection * C) {
+  drop_exist_table(C);
+  // create_color_table(C);
+  // create_state_table(C);
+  // create_team_table(C);
+  // create_player_table(C);
+}
+
 int main (int argc, char *argv[]) 
 {
 
@@ -30,7 +38,7 @@ int main (int argc, char *argv[])
 
   //TODO: create PLAYER, TEAM, STATE, and COLOR tables in the ACC_BBALL database
   //      load each table with rows from the provided source txt files
-
+  setupTable(C);
 
   exercise(C);
 
