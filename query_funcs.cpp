@@ -278,4 +278,15 @@ void query4(connection * C, string team_state, string team_color) {
 }
 
 void query5(connection * C, int num_wins) {
+  string sql = "select P.first_name, P.last_name, T.name, T.wins\
+                from PLAYER P, TEAM T\
+                where P.team_id = T.team_id AND T.wins > " + to_string(num_wins) + ";";
+  nontransaction N(*C);
+  result res(N.exec(sql));
+  
+  cout << "FIRST_NAME LAST_NAME NAME WINS" << endl;
+  for (result::const_iterator it = res.begin(); it != res.end(); ++it) {
+  cout << it[0].as<string>() << " " << it[1].as<string>() << " " << it[2].as<string>()
+         << " " << it[3].as<int>() << endl;
+  }
 }
