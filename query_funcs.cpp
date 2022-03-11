@@ -234,6 +234,17 @@ void query1(connection * C,
 }
 
 void query2(connection * C, string team_color) {
+  string sql = "select T.name\
+  from TEAM T, color C\
+  where c.name = '" + team_color + "' and T.color_id = C.color_id;";
+
+  nontransaction N(*C);
+  result R(N.exec(sql));
+
+  cout << "Name" << endl;
+  for (auto it = R.begin(); it != R.end(); it++) {
+    cout << it[0].as<string>() << endl;
+  }
 }
 
 void query3(connection * C, string team_name) {
