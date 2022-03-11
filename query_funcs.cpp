@@ -103,6 +103,7 @@ void load_data(connection * C) {
   load_color_data(C);
   load_state_data(C);
   load_team_data(C);
+  load_player_data(C);
 }
 
 void load_color_data(connection * C) {
@@ -134,6 +135,23 @@ void load_state_data(connection * C) {
   }
 }
 
+void load_player_data(connection * C) {
+  fstream fs;
+  fs.open("./player.txt", ios::in);
+
+  string line;
+  while(getline(fs, line)) {
+    int player_id, team_id, uniform_num, mpg, ppg, rpg, apg;
+    string first_name, last_name;
+    double spg, bpg;
+
+    stringstream ss(line);
+    ss >> player_id >> team_id >> uniform_num >> first_name >> last_name >> mpg \
+    >> ppg >> rpg >> apg >> spg >> bpg;
+    add_player(C, team_id, uniform_num, first_name, last_name, mpg, ppg, rpg, apg, spg, bpg);
+  }
+}
+
 void add_player(connection * C,
                 int team_id,
                 int jersey_num,
@@ -145,6 +163,13 @@ void add_player(connection * C,
                 int apg,
                 double spg,
                 double bpg) {
+  work w(*C);
+  string sql = "INSERT INTO PLAYER (TEAM_ID, UNIFORM_NUM, FIRST_NAME, LAST_NAME, MPG, PPG, RPG, APG, SPG, BPG) VALUES (" +\
+    to_string(team_id) + ", " + to_string(jersey_num) + ", " + w.quote(first_name) + ", " + w.quote(last_name) + ", " +\
+    to_string(mpg) + ", " + to_string(ppg) + ", " + to_string(rpg) + ", " + to_string(apg) + ", "\
+    + to_string(spg) + ", " + to_string(bpg) + ")";
+  w.exec(sql);
+  w.commit();
 }
 
 void add_team(connection * C,
