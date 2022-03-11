@@ -102,6 +102,7 @@ void create_player_table(connection * C) {
 void load_data(connection * C) {
   load_color_data(C);
   load_state_data(C);
+  load_team_data(C);
 }
 
 void load_color_data(connection * C) {
@@ -152,6 +153,13 @@ void add_team(connection * C,
               int color_id,
               int wins,
               int losses) {
+  string sql = "INSERT INTO TEAM (NAME, STATE_ID, COLOR_ID, WINS, LOSSES) VALUES ('" + name \
+                + "', " + to_string(state_id) + 
+                ", " + to_string(color_id) +
+                ", " + to_string(wins) +
+                ", " + to_string(losses) + ");";
+  execute_sql(C, sql);
+
 }
 
 void add_state(connection * C, string name) {
@@ -162,6 +170,21 @@ void add_state(connection * C, string name) {
 void add_color(connection * C, string name) {
   string sql = "INSERT INTO COLOR (NAME) VALUES ('" + name + "');";
   execute_sql(C, sql);
+}
+
+void load_team_data(connection * C) {
+    fstream fs;
+    fs.open("./team.txt", ios::in);
+
+    string line;
+    while(getline(fs, line)) {
+      stringstream ss(line);
+      int team_id = 0, state_id = 0, color_id = 0, wins = 0, loss = 0;
+      string name;
+
+      ss >> team_id >> name >> state_id >> color_id >> wins >> loss;
+      add_team(C, name, state_id, color_id, wins, loss);
+    }
 }
 
 void query1(connection * C,
