@@ -263,6 +263,18 @@ void query3(connection * C, string team_name) {
 }
 
 void query4(connection * C, string team_state, string team_color) {
+  string sql = "select P.first_name, P.last_name, P.uniform_num\
+                from PLAYER P, STATE S, COLOR C, TEAM T\
+                where P.team_id = T.team_id and T.state_id = S.state_id and T.color_id = C.color_id\
+                and C.name = '" + team_color + "' and S.name = '" + team_state + "';";
+  nontransaction N(*C);
+  result res(N.exec(sql));
+
+  cout << "FIRST_NAME LAST_NAME UNIFORM_NUM" << endl;
+  for (auto it = res.begin(); it != res.end(); ++it) {
+    cout << it[0].as<string>() << " " << it[1].as<string>() << " " << it[2].as<int>()
+         << endl;
+  }
 }
 
 void query5(connection * C, int num_wins) {
