@@ -248,6 +248,18 @@ void query2(connection * C, string team_color) {
 }
 
 void query3(connection * C, string team_name) {
+  string sql = "select P.first_name, P.last_name\
+                from PLAYER P, TEAM T\
+                where P.team_id = T.team_id AND T.name = '" + team_name + "'\
+                ORDER BY p.ppg DESC; ";
+  nontransaction N(*C);
+  result res(N.exec(sql));
+
+  cout << "FIRST_NAME LAST_NAME" << endl;
+  for (auto it = res.begin(); it != res.end(); it++) {
+    cout << it[0].as<string>() << " " << it[1].as<string>() << endl;
+  }
+
 }
 
 void query4(connection * C, string team_state, string team_color) {
