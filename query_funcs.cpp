@@ -100,11 +100,11 @@ void create_player_table(connection * C) {
 }
 
 void load_data(connection * C) {
-  vector<string> color_attributes = {"name"};
-  load_color_data(C, color_attributes);
+  load_color_data(C);
+  load_state_data(C);
 }
 
-void load_color_data(connection * C, vector<string> attributes) {
+void load_color_data(connection * C) {
   fstream fs;
   fs.open("./color.txt", ios::in);
 
@@ -115,6 +115,21 @@ void load_color_data(connection * C, vector<string> attributes) {
     stringstream ss(line);
     ss >> color_id >> color_name;
     add_color(C, color_name);
+  }
+}
+
+void load_state_data(connection * C) {
+  fstream fs;
+  fs.open("./state.txt", ios::in);
+
+  string line;
+  while (getline(fs, line))
+  {
+    int state_id;
+    string state_name;
+    stringstream ss(line);
+    ss >> state_id >> state_name;
+    add_state(C, state_name);
   }
 }
 
@@ -140,6 +155,8 @@ void add_team(connection * C,
 }
 
 void add_state(connection * C, string name) {
+  string sql = "INSERT INTO STATE (NAME) VALUES ('" + name + "');";
+  execute_sql(C, sql);
 }
 
 void add_color(connection * C, string name) {
