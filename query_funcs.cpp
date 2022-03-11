@@ -1,5 +1,7 @@
 #include "query_funcs.h"
 
+#include <fstream>
+
 void execute_sql(connection * C, string sql) {
   work W(*C);
   W.exec(sql);
@@ -97,6 +99,25 @@ void create_player_table(connection * C) {
     execute_sql(C, sql);
 }
 
+void load_data(connection * C) {
+  vector<string> color_attributes = {"name"};
+  load_color_data(C, color_attributes);
+}
+
+void load_color_data(connection * C, vector<string> attributes) {
+  fstream fs;
+  fs.open("./color.txt", ios::in);
+
+  string line;
+  while (getline(fs, line)) {
+    string color_name;
+    int color_id;
+    stringstream ss(line);
+    ss >> color_id >> color_name;
+    add_color(C, color_name);
+  }
+}
+
 void add_player(connection * C,
                 int team_id,
                 int jersey_num,
@@ -122,6 +143,8 @@ void add_state(connection * C, string name) {
 }
 
 void add_color(connection * C, string name) {
+  string sql = "INSERT INTO COLOR (NAME) VALUES ('" + name + "');";
+  execute_sql(C, sql);
 }
 
 void query1(connection * C,

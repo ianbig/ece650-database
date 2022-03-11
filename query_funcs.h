@@ -15,7 +15,11 @@ void create_team_table(connection * C);
 void create_state_table(connection * C);
 void create_color_table(connection * C);
 
-unordered_map<string, string> load_data(string filename, vector<string> attributes);
+void load_data(connection * C);
+void load_player_data(vector<string> attributes);
+void load_color_data(connection * C, vector<string> attributes);
+void load_state_data(vector<string> attributes);
+void load_team_data(vector<string> attributes);
 
 void add_player(connection *C, int team_id, int jersey_num, string first_name, string last_name,
 		int mpg, int ppg, int rpg, int apg, double spg, double bpg);
