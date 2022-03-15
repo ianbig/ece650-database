@@ -1,6 +1,7 @@
 #include "query_funcs.h"
 
 #include <fstream>
+#include <iomanip>
 
 void execute_sql(connection * C, string sql) {
   work W(*C);
@@ -231,6 +232,45 @@ void query1(connection * C,
             int use_bpg,
             double min_bpg,
             double max_bpg) {
+    string sql = "SELECT * FROM PLAYER P where P.player_id >= 0 ";
+    if (use_mpg) {
+      sql += "AND P.mpg >= " + to_string(min_mpg) + " AND P.mpg <= " + to_string(max_mpg);
+    }
+
+    if (use_ppg) {
+      sql += " AND P.ppg >= " + to_string(min_ppg) + " AND P.ppg <= " + to_string(max_ppg);
+    }
+
+    if (use_rpg) {
+      sql += " AND P.rpg >= " + to_string(min_rpg) + " AND P.rpg <= " + to_string(max_rpg);
+    }
+
+    if (use_apg) {
+      sql += " AND P.apg >= " + to_string(min_apg) + " AND P.apg <= " + to_string(max_apg);
+    }
+
+    if (use_spg) {
+      sql += " AND P.spg >= " + to_string(min_spg) + " AND P.spg <=" + to_string(max_spg);
+    }
+    
+    if (use_bpg) {
+      sql += " AND P.bpg >= " + to_string(min_bpg) + " AND P.bpg <= " + to_string(max_bpg);
+    }
+
+    sql += ";";
+    
+    nontransaction N(*C);
+    result R(N.exec(sql));
+
+    cout << "PLAYER_ID TEAM_ID UNIFORM_NUM FIRST_NAME LAST_NAME MPG PPG RPG APG SPG BPG"
+       << endl;
+    for (result::const_iterator c = R.begin(); c != R.end(); ++c) {
+      cout << c[0].as<int>() << " " << c[1].as<int>() << " " << c[2].as<int>() << " "
+         << c[3].as<string>() << " " << c[4].as<string>() << " " << c[5].as<int>() << " "
+         << c[6].as<int>() << " " << c[7].as<int>() << " " << c[8].as<int>() << " "
+         << fixed << setprecision(1) << c[9].as<double>() << " " << c[10].as<double>()
+         << endl;
+  }
 }
 
 void query2(connection * C, string team_color) {
@@ -241,7 +281,7 @@ void query2(connection * C, string team_color) {
   nontransaction N(*C);
   result R(N.exec(sql));
 
-  cout << "Name" << endl;
+  cout << "NAME" << endl;
   for (auto it = R.begin(); it != R.end(); it++) {
     cout << it[0].as<string>() << endl;
   }
